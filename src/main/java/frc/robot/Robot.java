@@ -27,9 +27,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
   private static OI oi;
-
-  private Joystick leftStick;
-  private Joystick rightStick;
   
   private TalonSRX rightMaster;
   private TalonSRX leftMaster;
@@ -39,8 +36,6 @@ public class Robot extends TimedRobot {
 
   private VictorSPX leftSlave1;
   private VictorSPX leftSlave2;
-
-  private TalonSRX elevator;
 
   @Override
   public void robotInit() {
@@ -55,8 +50,6 @@ public class Robot extends TimedRobot {
   
     leftSlave1 = new VictorSPX(19);
     leftSlave2 = new VictorSPX(20);
-
-    elevator = new TalonSRX(6);
 
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
@@ -76,15 +69,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //m_myRobot.tankDrive(m_leftStick.getY(), m_rightStick.getY());
     
-    double leftInput = oi.xboxController.getLeftY();
-    double rightInput = oi.xboxController.getRightY();
+    double leftInput = oi.ps4Controller.getLeftY();
+    double rightInput = oi.ps4Controller.getRightY();
 
-    double elevatorInput = oi.xboxController.getLeftX();
-
-    SmartDashboard.putNumber("elevator Inp%ut", elevatorInput);
-    elevator.set(ControlMode.PercentOutput, elevatorInput);
     rightMaster.set(ControlMode.PercentOutput, rightInput);
     leftMaster.set(ControlMode.PercentOutput, leftInput);
   }
