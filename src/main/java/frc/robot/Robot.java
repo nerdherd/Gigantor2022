@@ -18,48 +18,32 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import frc.robot.OI;
+import frc.robot.Logging.NerdyBadLog;
+import frc.robot.subsystems.Drive;
 
 public class Robot extends TimedRobot {
   private static OI oi;
+  private static Drive drive;
   
-  private TalonSRX rightMaster;
-  private TalonSRX leftMaster;
   
-  private VictorSPX rightSlave1;
-  private VictorSPX rightSlave2;
-
-  private VictorSPX leftSlave1;
-  private VictorSPX leftSlave2;
 
   @Override
   public void robotInit() {
 
     oi = new OI();
 
-    rightMaster = new TalonSRX(2);
-    leftMaster = new TalonSRX(1);
-    
-    rightSlave1 = new VictorSPX(3);
-    rightSlave2 = new VictorSPX(4);
-  
-    leftSlave1 = new VictorSPX(19);
-    leftSlave2 = new VictorSPX(20);
+    drive = new Drive();
 
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-    rightMaster.setInverted(true);
-
-    leftSlave1.follow(leftMaster);
-    leftSlave2.follow(leftMaster);
-    rightSlave1.follow(rightMaster);
-    rightSlave2.follow(rightMaster);
-
-    leftSlave1.setInverted(InvertType.FollowMaster);
-    leftSlave2.setInverted(InvertType.FollowMaster);
-    rightSlave1.setInverted(InvertType.FollowMaster);
-    rightSlave2.setInverted(InvertType.FollowMaster);
+    
+    
+    
+    
+    NerdyBadLog.initAndLog("/home/lvuser/logs/", "Test5", 0.02, drive);
   }
+
 
   @Override
   public void teleopPeriodic() {
@@ -67,7 +51,10 @@ public class Robot extends TimedRobot {
     double leftInput = oi.ps4Controller.getLeftY();
     double rightInput = oi.ps4Controller.getRightY();
 
-    rightMaster.set(ControlMode.PercentOutput, rightInput);
-    leftMaster.set(ControlMode.PercentOutput, leftInput);
+    drive.rightMaster.set(ControlMode.PercentOutput, rightInput);
+    drive.leftMaster.set(ControlMode.PercentOutput, leftInput);
   }
+
+
+  
 }
