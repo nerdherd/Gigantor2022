@@ -8,6 +8,7 @@ import java.rmi.dgc.VMID;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -42,6 +43,35 @@ public class Robot extends TimedRobot {
 
   private TalonSRX elevator;
 
+  public static double driveStraightkP = 2;
+  public static double driveStraightkD = 0.7;
+
+  public void drive(double leftSpeed, double rightSpeed, int waitTime) {
+    leftMaster.set(ControlMode.Velocity, leftSpeed);
+    rightMaster.set(ControlMode.Velocity, rightSpeed);
+
+    Timer.delay(waitTime/1000);
+  }
+
+  public void PDDriveStraight(double target, double timeStep) {
+      double error = 0;
+      double oldError = 0;
+      double threshold = 0.025;
+      double speed = 0;
+
+      while (error > threshold) {
+          oldError = error;
+          error = (ticksToRevolutions(rightMaster.getSelectedSensorPosition()) + ticksToRevolutions(leftMaster.getSelectedSensorPosition()))/2;
+
+          speed = (driveStraightkP * error) + ((error - oldError) / (timeStep) * driveStraightkD);
+          drive(speed, speed, 10);
+      }
+  }
+
+  private double ticksToRevolutions(double ticks) {
+      return (ticks / 2048);
+  }
+
   @Override
   public void robotInit() {
 
@@ -74,6 +104,12 @@ public class Robot extends TimedRobot {
     rightSlave2.setInverted(InvertType.FollowMaster);
   }
 
+
+  @Override
+  public void autonomousPeriodic() {
+    drive(5, 5, 10);
+  }
+
   @Override
   public void teleopPeriodic() {
     //m_myRobot.tankDrive(m_leftStick.getY(), m_rightStick.getY());
@@ -83,7 +119,7 @@ public class Robot extends TimedRobot {
 
     double elevatorInput = oi.xboxController.getLeftX();
 
-    SmartDashboard.putNumber("elevator Inp%ut", elevatorInput);
+    SmartDashboard.putNumber("elevator Input", elevatorInput);
     elevator.set(ControlMode.PercentOutput, elevatorInput);
     rightMaster.set(ControlMode.PercentOutput, rightInput);
     leftMaster.set(ControlMode.PercentOutput, leftInput);
