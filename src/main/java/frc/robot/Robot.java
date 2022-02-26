@@ -6,14 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import com.nerdherd.lib.drivetrain.teleop.TankDrive;
+import com.nerdherd.lib.motor.motorcontrollers.NerdyTalon;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Drive;
 
 /**
@@ -21,30 +19,35 @@ import frc.robot.subsystems.Drive;
  * the code necessary to operate a robot with tank drive.
  */
 public class Robot extends TimedRobot {
-  private static OI oi;
   private static PS4OI ps4oi;
-  public static Drive Drive;
+  public static Drive drive;
 
-  //private TalonSRX elevator;
+  private NerdyTalon elevator;
 
   @Override
   public void robotInit() {
     ps4oi = new PS4OI(0.2);
-    Drive = new Drive();
+    drive = new Drive();
 
-    //elevator = new TalonSRX(6);
+    elevator = new NerdyTalon(6);
   }
 
   @Override
   public void teleopPeriodic() {
-    //Drive.setPower(ps4oi.getDriveJoyLeftY(), ps4oi.getDriveJoyRightY());
-    CommandScheduler.getInstance().schedule(new TankDrive(Drive, ps4oi));
+    double leftPower = ps4oi.getDriveJoyLeftY();
+    double rightPower = ps4oi.getDriveJoyRightY();
 
-    //double elevatorInput = oi.xboxController.getLeftX();
+    SmartDashboard.putNumber("Left Drive Power", leftPower);
+    SmartDashboard.putNumber("Right Drive Power", rightPower);
+    drive.setPower(leftPower, rightPower);
+    
+    //CommandScheduler.getInstance().schedule(new TankDrive(Drive, ps4oi));
 
-    //SmartDashboard.putNumber("elevator Inp%ut", elevatorInput);
-    //elevator.set(ControlMode.PercentOutput, elevatorInput);
+    double elevatorInput = ps4oi.getDriveJoyLeftX();
 
-    CommandScheduler.getInstance().run();
+    SmartDashboard.putNumber("elevator Inp%ut", elevatorInput);
+    elevator.set(ControlMode.PercentOutput, elevatorInput);
+
+    //CommandScheduler.getInstance().run();
   }
 }
