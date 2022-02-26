@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
   private static OI oi;
+  private static PS4OI ps4oi;
 
   private Joystick leftStick;
   private Joystick rightStick;
@@ -45,7 +46,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    oi = new OI();
+    //oi = new OI();
+    ps4oi = new PS4OI(0.2);
 
     rightMaster = new TalonSRX(2);
     leftMaster = new TalonSRX(1);
