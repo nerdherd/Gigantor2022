@@ -6,6 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Random;
+import java.io.IOException;
+
+import java.util.Random;
 
 /**
  * This is a demo program showing the use of the DifferentialDrive class, specifically it contains
@@ -13,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   public RobotContainer robotContainer;
+  public static Path fileName;
 
   @Override
   public void robotInit() {
@@ -20,7 +27,11 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
 
     robotContainer.setNeutralModes();
+
+    RobotContainer.initLog();
   }
+
+  
 
   @Override
   public void autonomousPeriodic() {
@@ -30,5 +41,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     robotContainer.joystickControls();
+    robotContainer.configureButtonBindings();
+
+
   }
 }

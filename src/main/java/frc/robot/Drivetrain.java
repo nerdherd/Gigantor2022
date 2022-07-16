@@ -26,6 +26,7 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain() {
         rightMaster = new TalonSRX(RobotMap.kRightMasterTalonID);
+        rightMaster.setInverted(true);
         leftMaster = new TalonSRX(RobotMap.kLeftMasterTalonID);
 
         rightSlave1 = new VictorSPX(RobotMap.kRightSlave1VictorID);
@@ -43,10 +44,10 @@ public class Drivetrain extends SubsystemBase {
         leftSlave1.setInverted(InvertType.FollowMaster);
         leftSlave2.setInverted(InvertType.FollowMaster);
 
-        compressor = new Compressor(3, PneumaticsModuleType.CTREPCM);
+        compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
         compressor.enableDigital();
 
-        shifter = new DoubleSolenoid(3, PneumaticsModuleType.CTREPCM, RobotMap.kDriveShifterForwardID, RobotMap.kDriveShifterReverseID);
+        shifter = new DoubleSolenoid(0, PneumaticsModuleType.CTREPCM, RobotMap.kDriveShifterForwardID, RobotMap.kDriveShifterReverseID);
     }
 
     public void setPower(double leftSpeed, double rightSpeed) {

@@ -10,7 +10,7 @@ public class RobotMap {
     public static final int kLeftSlave1VictorID = 19;
     public static final int kLeftSlave2VictorID = 20;
 
-    public static final int kDriveShifterForwardID = 0;
-    public static final int kDriveShifterReverseID = 7;
+    public static final int kDriveShifterForwardID = 1;
+    public static final int kDriveShifterReverseID = 2;
 
 }
